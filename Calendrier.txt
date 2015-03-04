@@ -1,0 +1,37 @@
+Planning :
+
+02/03-08/03 : préparation du dépôt, attribution des tâches
+09/03-15/03 : définition des conventions (format des entrées-sorties...), début de l'implémentation
+16/03-22/03 : implémentation
+23/03-29/03 : implémentation et tests unitaires
+30/03-05/04 : tests sur textes réels et analyse des résultats
+06/04-12/04 : rédaction du rapport
+13/04-17/04 : révision de la version finale et remise 
+
+Avancement :
+
+02/03-08/03 :
+	Dépôt fonctionnel. 
+	Tâches attribuées :
+		LH : implémentation de l'algorithme par extraction
+		LF : implémentation de l'algorithme par abstraction
+		Pour le reste (tests, analyse et rapport), cela dépendra de l'avancement de chacun.
+	
+09/03-15/03 : 
+	
+	
+16/03-22/03 :
+	
+	
+23/03-29/03 :
+	
+	
+30/03-05/04 : 
+	
+	
+06/04-12/04 :
+	
+	
+13/04-17/04 :
+	
+	
