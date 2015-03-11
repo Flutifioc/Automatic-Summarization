@@ -18,7 +18,10 @@ Avancement :
 		Pour le reste (tests, analyse et rapport), cela dépendra de l'avancement de chacun.
 	
 09/03-15/03 : 
-	
+	Mise en place du maven pour le projet.
+	Division du projet en packages, leur implémentation étant attribuée entre nous.
+	Définition des interfaces entre packages.
+	Importation des sources pour la partie par abstraction.
 	
 16/03-22/03 :
 	
