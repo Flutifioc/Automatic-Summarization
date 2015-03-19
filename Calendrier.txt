@@ -9,6 +9,7 @@ Planning :
 13/04-17/04 : révision de la version finale et remise 
 
 Avancement :
+(LF = Ludovic Font, LH = Lara Haidar)
 
 02/03-08/03 :
 	Dépôt fonctionnel. 
@@ -18,12 +19,19 @@ Avancement :
 		Pour le reste (tests, analyse et rapport), cela dépendra de l'avancement de chacun.
 	
 09/03-15/03 : 
-	Mise en place du maven pour le projet.
-	Division du projet en packages, leur implémentation étant attribuée entre nous.
-	Définition des interfaces entre packages.
-	Importation des sources pour la partie par abstraction.
+	LF et LH:
+		- Mise en place du maven pour le projet.
+		- Division du projet en packages, leur implémentation étant attribuée entre nous.
+		- Définition des interfaces entre packages.
+		- Importation des sources pour la partie par abstraction.
 	
 16/03-22/03 :
+	LH:
+		- Début de l'implementation de l'algorithme par extraction
+		- Implémentation de l'annotation des mots du language (coefficient idf)
+		- Implémentation du calcul de centroid pour les phrases d'un document 
+		
+	LF:
 	
 	
 23/03-29/03 :
