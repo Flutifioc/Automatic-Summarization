@@ -24,10 +24,19 @@ Avancement :
 	Importation des sources pour la partie par abstraction.
 	
 16/03-22/03 :
-	
+	LH :
+        - Début de l'implementation de l'algorithme par extraction
+        - Implémentation de l'annotation des mots du language (coefficient idf)
+        - Implémentation du calcul de centroid pour les phrases d'un document d pour les phrases d'un document
+	LF : 
+		- test des requêtes à distance pour l'algo par abstraction
 	
 23/03-29/03 :
+	LH : 
 	
+	LF :
+		- Inclusion du tagger POS Stanford
+		- Le programme fonctionne sur un petit exemple. Encore quelques soucis pour les textes plus gros (phrases longues, acronymes...)
 	
 30/03-05/04 : 
 	
