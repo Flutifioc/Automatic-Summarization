@@ -10,10 +10,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-/**
- *
- * @author lufon
- */
 public class ExtractionSummarizer {
     
     private int TRESHOLD = 1; // CHANGE ME 
@@ -64,6 +60,6 @@ public class ExtractionSummarizer {
     }
     
     public File summarizeText(ArrayList<String> sentences) {
-        return new File ("bouh");
+        return new File ("");
     }
 }
