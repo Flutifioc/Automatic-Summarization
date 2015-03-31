@@ -1,0 +1,6 @@
+file=C:\Docs\Poly\IFT6010\ift6010\Automatic_Summarization_Maven\Documents\Wikipedia.txt
+file=C:\Docs\Poly\IFT6010\ift6010\Automatic_Summarization_Maven\Documents\globalresearch.txt
+file=C:\Docs\Poly\IFT6010\ift6010\Automatic_Summarization_Maven\Documents\historydotcom.txt
+
+abstractdestfile=C:\Docs\Poly\IFT6010\ift6010\Automatic_Summarization_Maven\AbstractSummary.txt
+
