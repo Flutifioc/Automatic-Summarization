@@ -39,9 +39,14 @@ Avancement :
 		- Le programme fonctionne sur un petit exemple. Encore quelques soucis pour les textes plus gros (phrases longues, acronymes...)
 	
 30/03-05/04 : 
+	LH: 
+		- Implémentation du calcul de centralité et de degree
+		- Implémentation de la méthode lexrank
 	
 	
 06/04-12/04 :
+	LH:
+		- Integration du parser de wikipedia
 	
 	
 13/04-17/04 :
