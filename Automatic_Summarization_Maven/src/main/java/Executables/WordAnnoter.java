@@ -14,7 +14,7 @@ public class WordAnnoter {
         Hashtable<String, Double> idf = new Hashtable<String, Double>();
         int N = 0;
         
-        WikiPageIterator it = initializeWikipediaParser("simplewiki-latest-pages-articles.xml.bz2");
+        WikiPageIterator it = initializeWikipediaParser("/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/simplewiki-latest-pages-articles.xml.bz2");
         
         String document = "";
         while (it.hasMorePages()) {

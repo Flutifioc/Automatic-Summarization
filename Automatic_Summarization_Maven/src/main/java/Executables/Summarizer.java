@@ -103,7 +103,7 @@ public class Summarizer {
         }
         content = detectAcronyms(content);
         content = content.replaceAll("[\\r\\n]+", " ");
-        String[] sentences = content.split("[\\n\\r]|[^\\.].\\. |\\?|!|\"");
+        String[] sentences = content.split("[\\n\\r]|[^\\.].\\. |\\?|!");
         for (String sentence : sentences ){
             if (!sentence.equals("")) {
                 sentence = sentence.replaceAll("\\.?##+", ".");
