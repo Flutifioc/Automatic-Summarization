@@ -1,6 +1,7 @@
 package ExtractionSummarizer;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -10,7 +11,8 @@ import java.util.Set;
 
 public class ExtractionSummarizer {
     
-    private double TRESHOLD = 0.1; 
+    private double TRESHOLD = 0.1;
+    private static double pourcentage = 20.0/100.0;
     
     public ExtractionSummarizer(List<String> sentences, Hashtable<String, Double> idf) {
         //Double[] lexrankScores = calculateLexRank(sentences, idf);
@@ -36,14 +38,14 @@ public class ExtractionSummarizer {
             }
         }
             
-        Double error = 0.01;
+        Double error = 0.0001;
         Double[] lexrankScores = powerMethod(lexrank, nbSentences, error);
         return getBestSentencesLexRank(sentences, lexrankScores);
     }
     
     private String getBestSentencesLexRank(List<String> sentences, Double[] lexrankScores)
     {
-        Double minScore = getNthBiggestValue(lexrankScores, (int)(2 * lexrankScores.length * (30.0/100.0)));
+        Double minScore = getNthBiggestValue(lexrankScores, (int)(lexrankScores.length * pourcentage));
         
         // search for best sentences
         String bestSentences = "";
@@ -87,7 +89,7 @@ public class ExtractionSummarizer {
     
     private String getBestSentencesCentrality(List<String> sentences, int[] degree)
     {
-        int minScore = getNthBiggestValue(degree, (int)(2 * degree.length * (30.0/100.0)));
+        int minScore = getNthBiggestValue(degree, (int)(degree.length * pourcentage));
         
         // search for best sentences
         String bestSentences = "";
@@ -189,8 +191,9 @@ public class ExtractionSummarizer {
     private Double getWordScore(String word, Hashtable<String, Double> idf)
     {
         Double score = 12.233653765290939;
-         if(!idf.containsKey(word))
-             idf.get(word);
+         if(idf.containsKey(word))                   
+             score = idf.get(word);
+         
          return score;
     }
     
@@ -246,7 +249,7 @@ public class ExtractionSummarizer {
    
     private String getBestSentencesCendroid(List<String> sentences, Double[] sentencesScore)
     {
-        Double minScore = getNthBiggestValue(sentencesScore, (int)(sentencesScore.length * (30.0/100.0)));
+        Double minScore = getNthBiggestValue(sentencesScore, (int)(sentencesScore.length * pourcentage));
         String bestSentences = "";
         
         for(int i = 0; i < sentences.size() ; i++)
@@ -325,20 +328,23 @@ public class ExtractionSummarizer {
 
     private Double[] powerMethod(Double[][] lexrank, int nbSentences, Double error)
     {
-        Double[][] p = new Double[nbSentences][nbSentences];
+        ArrayList<Double[]> p = new ArrayList<Double[]>();
+        p.add(new Double[nbSentences]);
         
-        Arrays.fill(p[0], 1.0/nbSentences);
+        Arrays.fill(p.get(0), 1.0/nbSentences);
         int t = 0;
         Double delta = 0.0;
         
         do
         {
             t = t+1;
-            p[t] = multiply(transpose(lexrank, nbSentences), p[t-1]);
-            delta = norm(minus(p[t], p[t-1]));
+            p.add(new Double[nbSentences]);
+        
+            p.set(t,multiply(transpose(lexrank, nbSentences), p.get(t-1)));
+            delta = norm(minus(p.get(t), p.get(t-1)));
         } while(delta > error);
         
-        return p[t];
+        return p.get(t);
     }
         
 }

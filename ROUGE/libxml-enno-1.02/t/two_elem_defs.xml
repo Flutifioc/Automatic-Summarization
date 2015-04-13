@@ -1,5 +1,0 @@
-<!DOCTYPE root [
- <!ELEMENT b EMPTY>
- <!ELEMENT b (#PCDATA)>
-]>
-<root/>

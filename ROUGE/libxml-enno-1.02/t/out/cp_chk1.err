@@ -1,4 +1,0 @@
-XML::Checker ERROR-157: unexpected Element [d]
-	Context: ChildElementIndex 0, line 12, column 3, byte 137
-XML::Checker ERROR-101: undefined ELEMENT [d]
-	Context: line 12, column 3, byte 137
