@@ -4,10 +4,14 @@ import AbstractionSummarizer.AbstractionSummarizer;
 import ExtractionSummarizer.ExtractionSummarizer;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -18,13 +22,14 @@ import java.util.logging.Logger;
  *
  */
 public class Summarizer {
+    private static String text ="";
 
     public static void main(String[] args) throws UnirestException {
 
         String toto = detectAcronyms("The U.S.S.R. are Russians. The U.S. are Americans.");
         
         ArrayList<File> documents = new ArrayList<File>();
-        File abstractDestFile = new File(args[0] + "results.txt");
+        File abstractDestFile = new File(args[0] + "results.txt"); // texte.txt
 
         // Etape 1 : parsing du fichier de config
         try {
@@ -70,13 +75,15 @@ public class Summarizer {
                 splitFile(document, sentences);
             }
 
+			Extraction(sentences);
+			
         /* Version 1 (deux méthodes séparément) */
         // Création des instances des summarizers
-            // ExtractionSummarizer extractSummarizer = new ExtractionSummarizer(annotedWords);
+            //ExtractionSummarizer extractSummarizer = new ExtractionSummarizer(annotedWords);
             AbstractionSummarizer abstractSummarizer = new AbstractionSummarizer(sentences, abstractDestFile);
 
         // Etape 2 : appeler les deux méthodes sur cette entrée, et récupérer leurs sorties
-            // File extractedSummary = extractSummarizer.summarizeText(sentences);
+            //File extractedSummary = extractSummarizer.summarizeText(sentences);
             File abstractedSummary = abstractSummarizer.summarizeText(sentences);
 
         } catch (IOException ex) {
@@ -92,18 +99,62 @@ public class Summarizer {
         // Etape 4 : mettre le résultat dans un fichier texte
         // Etape 5 : appel à ROUGE pour évaluer la sortie
     }
+	
+	private static Hashtable<String, Double> getIDFScores() throws FileNotFoundException, IOException
+    {
+        Hashtable<String, Double> idf = new Hashtable<String, Double>();
+        
+        File file = new File("C:\\Users\\Lara\\Desktop\\INF8225_Projet\\INF8225_Projet\\idf.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+        while ((line = reader.readLine()) != null)
+        {
+            String[] content = line.split(" ");
+            if(content.length == 2)
+                idf.put(content[0], Double.parseDouble(content[1]));
+        }
+        
+        return idf;
+    }
+        
+    private static void Extraction(List<String> sentences) throws IOException
+    {
+        //WordAnnoter wordAnnoter = new WordAnnoter();
+        //wordAnnoter.calculateIdf();
 
+        Hashtable<String, Double> idf = getIDFScores();
+
+        ExtractionSummarizer extractSummarizer = new ExtractionSummarizer(sentences, idf);
+
+        String bestSentences = extractSummarizer.calculateCentroid(sentences, idf);
+        String bestSentences1 = extractSummarizer.calculateDegreeCentrality(sentences, idf, new int[sentences.size()][sentences.size()], new int[sentences.size()]);
+        String bestSentences2 = extractSummarizer.calculateLexRank(sentences, idf);
+        String summaries = "Texte\n" + text + "\nCentroid\n" + bestSentences + "\nCentrality\n" + bestSentences1 + "\nLexRank\n" + bestSentences2;    
+
+        WriteSummaryInFile(summaries);
+        }
+
+    private static void WriteSummaryInFile(String summary)
+    {
+       try {
+            BufferedWriter out = new BufferedWriter(new FileWriter("bestSentences.txt"));
+            out.write(summary);
+            out.close();
+        } catch (IOException e) {} 
+    }
+	
     public static void splitFile(File document, List<String> sentencesList) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(document));
         String line = reader.readLine();
-        String content = line;
+        String content = "";
         while (line != null) {
+            text = text + line + "\n";
             content = content + line;
             line = reader.readLine();
         }
         content = detectAcronyms(content);
         content = content.replaceAll("[\\r\\n]+", " ");
-        String[] sentences = content.split("[\\n\\r]|[^\\.].\\. |\\?|!|\"");
+        String[] sentences = content.split("\\n|[.](?<!\\\\d)(?!\\\\d)");//"[\\n\\r]|[^\\.].\\. |\\?|!|\"");
         for (String sentence : sentences ){
             if (!sentence.equals("")) {
                 sentence = sentence.replaceAll("\\.?##+", ".");

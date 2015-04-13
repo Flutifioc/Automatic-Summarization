@@ -1,0 +1,61 @@
+Texte
+Using functional magnetic resonance imaging (fMRI), University of California, San Diego School of Medicine researchers say it may be possible to predict future language development outcomes in toddlers with autistic spectrum disorder (ASD), even before they’ve been formally diagnosed with the condition.
+The findings are published in the April 9 online issue of the journal Neuron.
+A major challenge of ASD diagnosis and treatment is that the neurological condition – which affects 1 in 68 children in the United States, mostly boys – is considerably heterogeneous. 
+Early symptoms differ between each ASD toddler, as does progression of the condition. 
+No uniform clinical phenotype exists, in part because the underlying causes for different subtypes of autism are diverse and not well-understood.
+“There is no better example than early language development,” said senior author Eric Courchesne, PhD, professor of neurosciences and co-director of the Autism Center of Excellence at UC San Diego. “Some individuals are minimally verbal throughout life. 
+They display high levels of symptom severity and may have poor clinical outcomes. 
+Others display delayed early language development, but then progressively acquire language skills and have relatively more positive clinical outcomes.”
+In other words, said Courchesne, in some children with ASD language improves substantially with age; but in some it may progress too slowly or even diminish.
+The neurodevelopmental bases for this variability are unknown, he said. Differences in treatment quantity do not fully account for it. But numerous studies have shown that early, accurate diagnoses of ASD can improve treatment benefits in many affected children.
+“It’s important to develop more and new biological ways to identify and stratify the ASD population into clinical sub-types so that we can create better, more individualized treatments,” said co-author Karen Pierce, PhD, associate professor of neurosciences and co-director of the Autism Center of Excellence.
+In the Neuron paper, Courchesne, first author Michael V. Lombardo, PhD, a senior researcher at the University of Cambridge and assistant professor at the University of Cyprus, Pierce and colleagues describe the first effort to create a process capable of detecting different brain subtypes within ASD that underlie and help explain varying development language trajectories and outcomes.
+“We wanted to see if patterns of brain activity in response to language can explain and predict how well language skills would develop in a toddler with ASD before that toddler actually began talking,” said Courchesne.
+The researchers combined prospective fMRI measurements of neural systems’ response to speech in children at the earliest ages at which risk of ASD can be clinically detected in a general pediatric population (at approximately ages 1-2 years) with comprehensive longitudinal diagnostic and clinical assessments of language skills at 3-4 years of age.
+They found that pre-diagnosis fMRI response to speech in ASD toddlers with relatively good language outcomes was highly similar to non-ASD comparison groups with robust responses to language in superior temporal cortices, a region of the brain responsible for processing sounds so that they can be understood as language.
+In contrast, ASD toddlers with poor language outcomes had superior temporal cortices that showed diminished or abnormal inactivity to speech.
+In sum, the study found entirely different neural substrates at initial clinical detection that precede and underlie later good versus poor language outcome in autism. 
+These findings, said researchers, will open new avenues of progress towards identifying the causes and best treatment for these two very different types of autism.
+“For the first time, our study shows a strong relationship between irregularities in speech-activation in the language-critical superior temporal cortex and actual, real-world language ability in ASD toddlers,” said Lombardo.
+The scientists said fMRI imaging also showed that the brains of ASD toddlers with poor language development processed speech differently, including how neural regions governing emotion, memory and motor skills were involved.
+“Our work represents one of the first attempts using fMRI to define a neurofunctional biomarker of a subtype in very young ASD toddlers,” said Pierce. 
+“Such subtypes help us understand the differences between persons with ASD. More importantly, they can help us determine how and why treatments are effective for some, but not all, on the autism spectrum.”
+
+Centroid
+Using functional magnetic resonance imaging (fMRI), University of California, San Diego School of Medicine researchers say it may be possible to predict future language development outcomes in toddlers with autistic spectrum disorder (ASD), even before they’ve been formally diagnosed with the condition. 
+“There is no better example than early language development,” said senior author Eric Courchesne, PhD, professor of neurosciences and co-director of the Autism Center of Excellence at UC San Diego. 
+“It’s important to develop more and new biological ways to identify and stratify the ASD population into clinical sub-types so that we can create better, more individualized treatments,” said co-author Karen Pierce, PhD, associate professor of neurosciences and co-director of the Autism Center of Excellence. 
+ Lombardo, PhD, a senior researcher at the University of Cambridge and assistant professor at the University of Cyprus, Pierce and colleagues describe the first effort to create a process capable of detecting different brain subtypes within ASD that underlie and help explain varying development language trajectories and outcomes. 
+“We wanted to see if patterns of brain activity in response to language can explain and predict how well language skills would develop in a toddler with ASD before that toddler actually began talking,” said Courchesne. 
+The researchers combined prospective fMRI measurements of neural systems’ response to speech in children at the earliest ages at which risk of ASD can be clinically detected in a general pediatric population (at approximately ages 1-2 years) with comprehensive longitudinal diagnostic and clinical assessments of language skills at 3-4 years of age. 
+They found that pre-diagnosis fMRI response to speech in ASD toddlers with relatively good language outcomes was highly similar to non-ASD comparison groups with robust responses to language in superior temporal cortices, a region of the brain responsible for processing sounds so that they can be understood as language. 
+“For the first time, our study shows a strong relationship between irregularities in speech-activation in the language-critical superior temporal cortex and actual, real-world language ability in ASD toddlers,” said Lombardo. 
+
+Centrality
+Using functional magnetic resonance imaging (fMRI), University of California, San Diego School of Medicine researchers say it may be possible to predict future language development outcomes in toddlers with autistic spectrum disorder (ASD), even before they’ve been formally diagnosed with the condition. 
+The findings are published in the April 9 online issue of the journal Neuron. 
+A major challenge of ASD diagnosis and treatment is that the neurological condition – which affects 1 in 68 children in the United States, mostly boys – is considerably heterogeneous. 
+ No uniform clinical phenotype exists, in part because the underlying causes for different subtypes of autism are diverse and not well-understood. 
+”In other words, said Courchesne, in some children with ASD language improves substantially with age; but in some it may progress too slowly or even diminish. 
+“It’s important to develop more and new biological ways to identify and stratify the ASD population into clinical sub-types so that we can create better, more individualized treatments,” said co-author Karen Pierce, PhD, associate professor of neurosciences and co-director of the Autism Center of Excellence. 
+“We wanted to see if patterns of brain activity in response to language can explain and predict how well language skills would develop in a toddler with ASD before that toddler actually began talking,” said Courchesne. 
+The researchers combined prospective fMRI measurements of neural systems’ response to speech in children at the earliest ages at which risk of ASD can be clinically detected in a general pediatric population (at approximately ages 1-2 years) with comprehensive longitudinal diagnostic and clinical assessments of language skills at 3-4 years of age. 
+They found that pre-diagnosis fMRI response to speech in ASD toddlers with relatively good language outcomes was highly similar to non-ASD comparison groups with robust responses to language in superior temporal cortices, a region of the brain responsible for processing sounds so that they can be understood as language. 
+In sum, the study found entirely different neural substrates at initial clinical detection that precede and underlie later good versus poor language outcome in autism. 
+“For the first time, our study shows a strong relationship between irregularities in speech-activation in the language-critical superior temporal cortex and actual, real-world language ability in ASD toddlers,” said Lombardo. 
+ More importantly, they can help us determine how and why treatments are effective for some, but not all, on the autism spectrum. 
+
+LexRank
+Using functional magnetic resonance imaging (fMRI), University of California, San Diego School of Medicine researchers say it may be possible to predict future language development outcomes in toddlers with autistic spectrum disorder (ASD), even before they’ve been formally diagnosed with the condition. 
+The findings are published in the April 9 online issue of the journal Neuron. 
+A major challenge of ASD diagnosis and treatment is that the neurological condition – which affects 1 in 68 children in the United States, mostly boys – is considerably heterogeneous. 
+ No uniform clinical phenotype exists, in part because the underlying causes for different subtypes of autism are diverse and not well-understood. 
+”In other words, said Courchesne, in some children with ASD language improves substantially with age; but in some it may progress too slowly or even diminish. 
+“It’s important to develop more and new biological ways to identify and stratify the ASD population into clinical sub-types so that we can create better, more individualized treatments,” said co-author Karen Pierce, PhD, associate professor of neurosciences and co-director of the Autism Center of Excellence. 
+“We wanted to see if patterns of brain activity in response to language can explain and predict how well language skills would develop in a toddler with ASD before that toddler actually began talking,” said Courchesne. 
+The researchers combined prospective fMRI measurements of neural systems’ response to speech in children at the earliest ages at which risk of ASD can be clinically detected in a general pediatric population (at approximately ages 1-2 years) with comprehensive longitudinal diagnostic and clinical assessments of language skills at 3-4 years of age. 
+They found that pre-diagnosis fMRI response to speech in ASD toddlers with relatively good language outcomes was highly similar to non-ASD comparison groups with robust responses to language in superior temporal cortices, a region of the brain responsible for processing sounds so that they can be understood as language. 
+In sum, the study found entirely different neural substrates at initial clinical detection that precede and underlie later good versus poor language outcome in autism. 
+“For the first time, our study shows a strong relationship between irregularities in speech-activation in the language-critical superior temporal cortex and actual, real-world language ability in ASD toddlers,” said Lombardo. 
+ More importantly, they can help us determine how and why treatments are effective for some, but not all, on the autism spectrum. 
