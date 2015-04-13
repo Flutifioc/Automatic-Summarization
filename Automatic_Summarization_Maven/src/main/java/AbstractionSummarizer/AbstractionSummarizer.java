@@ -88,7 +88,7 @@ public class AbstractionSummarizer {
         
     }
     
-    public File summarizeText(ArrayList<String> sentences) throws UnirestException, FileNotFoundException, IOException {
+    public void summarizeText() throws UnirestException, FileNotFoundException, IOException {
         annotateSentences();
         createBodyForRequest();
         HttpResponse<JsonNode> response = Unirest.post("https://rxnlp-opinosis.p.mashape.com/generateOpinosisSummaries")
@@ -99,10 +99,9 @@ public class AbstractionSummarizer {
                 .asJson();
 
         System.out.println(response.getBody());
+        System.out.println(response.getStatus());
         FileOutputStream destStream = new FileOutputStream(destFile);
         destStream.write(response.getBody().toString().getBytes());
         destStream.close();
-
-        return new File ("bouh");
     }
 }

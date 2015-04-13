@@ -22,11 +22,7 @@ public class WordAnnoter {
         Hashtable<String, Double> idf = new Hashtable<String, Double>();
         int N = 0;
         
-<<<<<<< HEAD
-        WikiPageIterator it = initializeWikipediaParser("/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/simplewiki-latest-pages-articles.xml.bz2");
-=======
         initializeWikipediaParser("C:\\Users\\Lara\\Desktop\\Poly\\H2015\\ift6010\\Automatic_Summarization_Maven\\simplewiki-latest-pages-articles.xml.bz2");
->>>>>>> 9b415f07fd662b545bd69289c349f7b4d7d342c6
         
         while (true) 
         {

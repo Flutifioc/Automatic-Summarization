@@ -36,7 +36,7 @@ public class ExtractionSummarizer {
             }
         }
             
-        Double error = 0.0;
+        Double error = 0.01;
         Double[] lexrankScores = powerMethod(lexrank, nbSentences, error);
         return getBestSentencesLexRank(sentences, lexrankScores);
     }
@@ -336,7 +336,7 @@ public class ExtractionSummarizer {
             t = t+1;
             p[t] = multiply(transpose(lexrank, nbSentences), p[t-1]);
             delta = norm(minus(p[t], p[t-1]));
-        } while(delta < error);
+        } while(delta > error);
         
         return p[t];
     }

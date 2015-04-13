@@ -1,0 +1,50 @@
+##### Contrastive summary data set #####
+
+- When use this data set, please use the following publication as a reference.
+Hyun Duk Kim and ChengXiang Zhai, Generating Comparative Summaries of Contradictory Opinions in Text, CIKM 2009
+
+- Details about how this data set was made and used are on the publication (Hyun Duk Kim and ChengXiang Zhai, Generating Comparative Summaries of Contradictory Opinions in Text, CIKM 2009)
+
+- Contacts: 
+Hyun Duk Kim (hkim277 at illinois.edu), http://gildong2.com
+ChengXiang Zhai (czhai at cs.uiuc.edu), http://www.cs.uiuc.edu/homes/czhai/
+
+
+- Data File ('data' folder)
+   
+a. Filename
+[ProductName]_[feature]
+
+b. Format
+[(polarity)] (sentence number) - (sentence)
+
+[1]: positive 
+[0]: negative
+
+Ex.
+[1] 1 - the height adjustment knob is a bit flimsy, but it works well and provides good accuracy.
+[1] 2 - i noticed that the micro adjustment knob and collet are well made and work well too.
+[1] 3 - i don't have problems with the depth adjustment, the speed control, the collet ( i haven't tried the 1/4" sleeve yet) .
+[1] 4 - it is a great router for a table and with the depth adjustment knob it is easy to adjust depth prescisely.
+[1] 5 - the depth adjustment and b
+...
+
+
+- Human Label File Format
+
+a. Two human labels (cos_label1.txt, cos_label2.txt)
+
+b. Format
+For each data file, sentences are clustered into subtopcis.
+For each subtopic, sentence numbers maked in the data file are listed.
+
+------[data file name]
+---Pos
+[subtopic1] [positiveSentenceNumber1] [positiveSentenceNumber2] ...
+[subtopic2] [positiveSentenceNumber1] [positiveSentenceNumber2] ...
+...
+---Neg
+[subtopic1] [negativeSentenceNumber1] [negativeSentenceNumber2] ...
+[subtopic2] [negativeSentenceNumber1] [negativeSentenceNumber2] ...
+...
+
