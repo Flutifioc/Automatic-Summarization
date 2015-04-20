@@ -51,7 +51,7 @@ public class ExtractionSummarizer {
         String bestSentences = "";
         for(int i = 0; i < sentences.size() ; i++)
         {
-            if(lexrankScores[i] > minScore) 
+            if(lexrankScores[i] >= minScore) 
             {
                 bestSentences += sentences.get(i);
                 bestSentences += ". \n";
@@ -95,7 +95,7 @@ public class ExtractionSummarizer {
         String bestSentences = "";
         for(int i = 0; i < sentences.size() ; i++)
         {
-            if(degree[i] > minScore) 
+            if(degree[i] >= minScore) 
             {
                 bestSentences += sentences.get(i);
                 bestSentences += ". \n";
@@ -254,7 +254,7 @@ public class ExtractionSummarizer {
         
         for(int i = 0; i < sentences.size() ; i++)
         {
-            if(sentencesScore[i] > minScore)
+            if(sentencesScore[i] >= minScore)
             {
                 bestSentences += sentences.get(i);
                 bestSentences += ". \n";

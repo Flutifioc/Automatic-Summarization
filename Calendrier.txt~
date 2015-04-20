@@ -46,16 +46,10 @@ Avancement :
 	
 06/04-12/04 :
 	LH:
-		- Integration du parser de wikipedia et calcul des valeurs de idf
-	LF:
-		- Tentative d'implémentation de ROUGE (échec)
+		- Integration du parser de wikipedia
+	
 	
 13/04-17/04 :
-	LH et LF:
-		- Tests des deux méthodes sur divers textes
-
-18/04-24/04 :
-	LH et LF :
-		- Mise en commun, rédaction du rapport
+	
 	
 

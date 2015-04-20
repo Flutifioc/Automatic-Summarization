@@ -1,1 +1,1 @@
-{"results":[]}
+{"results":[{"summary":"software/nn is/vbz great/jj","score":"7.72"},{"summary":"software/nn ,/, is/vbz easy/jj to/to use/vb","score":"7.54"},{"summary":"n't/rb be/vb easier/jjr to/to use/vb","score":"2.96"},{"summary":"player/nn is/vbz good/jj at/in","score":"2.54"},{"summary":"nice/jj to/to look/vb at/in","score":"2.29"}]}

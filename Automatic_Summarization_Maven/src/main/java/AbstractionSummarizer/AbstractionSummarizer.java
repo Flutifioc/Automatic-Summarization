@@ -10,6 +10,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,7 +39,7 @@ public class AbstractionSummarizer {
         nonAnnotedSentences = new ArrayList<String>(inputSentences);
         annotedSentences = new ArrayList<String>();
         body = "";
-        maxGap = 3;
+        maxGap = 2;
         maxSentences = 5;
         minRedundancy = 2;
         doCollapse = "true";
@@ -68,7 +69,7 @@ public class AbstractionSummarizer {
     
     private void annotateSentences() {
         MaxentTagger tagger = new MaxentTagger("Documents/Taggers/english-bidirectional-distsim.tagger");
-        
+        annotedSentences = new ArrayList<String>();
         for (String sentence : nonAnnotedSentences) {
             String annotedString = tagger.tagString(sentence);
             annotedString = annotedString.replace("_", "/") + " ./.";
@@ -86,6 +87,15 @@ public class AbstractionSummarizer {
         }
         body = body + "]}";
         
+    }
+    
+    public void setSentences(ArrayList<String> newSentences) {
+        this.annotedSentences = new ArrayList<String>();
+        this.annotedSentences.addAll(newSentences);
+    }
+    
+    public void setDestinationFile(File newDest) {
+        this.destFile = newDest;
     }
     
     public void summarizeText() throws UnirestException, FileNotFoundException, IOException {
