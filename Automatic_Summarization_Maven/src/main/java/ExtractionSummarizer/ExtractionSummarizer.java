@@ -3,20 +3,25 @@ package ExtractionSummarizer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 public class ExtractionSummarizer {
     
-    private int TRESHOLD = 1; // CHANGE ME 
+    private double TRESHOLD = 0.1;
+    private static double pourcentage = 20.0/100.0;
     
-    public ExtractionSummarizer(ArrayList<String> sentences, Hashtable<String, Double> idf) {
-        Double[] lexrankScores = calculateLexRank(sentences, idf);
-        summarizeText(sentences, lexrankScores);
-    }
+    public ExtractionSummarizer(List<String> sentences, Hashtable<String, Double> idf) {
+        //Double[] lexrankScores = calculateLexRank(sentences, idf);
+        //summarizeText(sentences, lexrankScores);
+    }    
     
-    private Double[] calculateLexRank(ArrayList<String> sentences, Hashtable<String, Double> idf)
+    /************************************** Methode LexRank **********************************************/
+    
+    public String calculateLexRank(List<String> sentences, Hashtable<String, Double> idf)
     {        
         final int nbSentences = sentences.size();
         int[][] idsmodcos = new int[nbSentences][nbSentences];
@@ -33,22 +38,39 @@ public class ExtractionSummarizer {
             }
         }
             
-        Double error = 0.0;
+        Double error = 0.0001;
         Double[] lexrankScores = powerMethod(lexrank, nbSentences, error);
-        return lexrankScores;
+        return getBestSentencesLexRank(sentences, lexrankScores);
     }
     
-    private void calculateDegreeCentrality(ArrayList<String> sentences, Hashtable<String, Double> idf, int[][] idsmodcos, int[] degree)
+    private String getBestSentencesLexRank(List<String> sentences, Double[] lexrankScores)
     {
-        int THRESHOLD = 0;
+        Double minScore = getNthBiggestValue(lexrankScores, (int)(lexrankScores.length * pourcentage));
         
+        // search for best sentences
+        String bestSentences = "";
+        for(int i = 0; i < sentences.size() ; i++)
+        {
+            if(lexrankScores[i] > minScore) 
+            {
+                bestSentences += sentences.get(i);
+                bestSentences += ". \n";
+            }
+        }
+        return bestSentences;
+    }
+    
+    /************************************** Methode des Centralite **********************************************/
+    
+    public String calculateDegreeCentrality(List<String> sentences, Hashtable<String, Double> idf, int[][] idsmodcos, int[] degree)
+    {        
         for(int i = 0 ; i < sentences.size(); i++)
         {
             for(int j = i ; j < sentences.size(); j++)
             {
                 Double idfmodcos = calculateModifCosine(sentences.get(i),sentences.get(j), idf);
                 
-                if(idfmodcos > THRESHOLD)
+                if(idfmodcos > TRESHOLD)
                 {
                     idsmodcos[i][j] = 1;
                     idsmodcos[j][i] = 1;
@@ -62,26 +84,69 @@ public class ExtractionSummarizer {
                 }
             }
         }
+        return getBestSentencesCentrality(sentences, degree);       
     }
     
-     private Double calculateModifCosine(String s1, String s2, Hashtable<String, Double> idf)
+    private String getBestSentencesCentrality(List<String> sentences, int[] degree)
+    {
+        int minScore = getNthBiggestValue(degree, (int)(degree.length * pourcentage));
+        
+        // search for best sentences
+        String bestSentences = "";
+        for(int i = 0; i < sentences.size() ; i++)
+        {
+            if(degree[i] > minScore) 
+            {
+                bestSentences += sentences.get(i);
+                bestSentences += ". \n";
+            }
+        }
+        return bestSentences;
+    }
+    
+    private Double calculateModifCosine(String s1, String s2, Hashtable<String, Double> idf)
     {
         Hashtable<String, Double> tfs1 = calculateFrequenceOfWord(s1, idf);
         Hashtable<String, Double> tfs2 = calculateFrequenceOfWord(s2, idf);
-        
+                 
         // calcul du denominateur
         Double den = calculateModifCosineDen(s1,tfs1) * calculateModifCosineDen(s2,tfs2);        
         
         Double idfmodcos = 0.0;
-        String concatWord = s1 + " " + s2;
-        String[] words = concatWord.split(" ");
+        String concatSentences = s1 + " " + s2;
+        String[] words = concatSentences.split("[^a-zA-Z]");
         
         Set<String> treatedWords = new HashSet<String>();
         for(String word : words)
         {
-            if(!treatedWords.contains(word)){ // TODO : REMOVE CAPITAL LETTTERS
-                idfmodcos += tfs1.get(word) * tfs2.get(word) * Math.pow(idf.get(word),2);
-                treatedWords.add(word);
+            if (word.matches(".*\\w.*"))
+            {
+                word = word.toLowerCase();
+                if(!treatedWords.contains(word))
+                {     
+                    Double tf1 = 0.0;
+                    Double tf2 = 0.0;
+                    Double scoreIdf = 0.0;
+                                                         
+                    if(tfs1.containsKey(word))
+                    { 
+                        tf1 = tfs1.get(word);
+                    }
+                    
+                    if(tfs2.containsKey(word))
+                    {
+                        tf2 = tfs2.get(word);     
+                    }
+                    
+                    if(idf.containsKey(word))
+                    {
+                        scoreIdf = getWordScore(word, idf);
+                    }
+
+                    Double wordScore = tf1*tf2*Math.pow(scoreIdf,2);
+                    idfmodcos += wordScore;
+                    treatedWords.add(word);
+                }
             }
         }
         
@@ -94,13 +159,19 @@ public class ExtractionSummarizer {
     {
         Hashtable<String, Double> tf = new Hashtable<String, Double>();
         
-        String[] words = sentence.split(" ");
+        String[] words = sentence.split("[^a-zA-Z]");
         for(String word : words)
         {
-            if(tf.containsKey(word)) // TODO : REMOVE CAPITAL LETTTERS
-                    tf.put(word, tf.get(word) + idf.get(word));
+            if (word.matches(".*\\w.*"))
+            {
+                word = word.toLowerCase();
+                Double wordScore = getWordScore(word, idf);
+
+                if(tf.containsKey(word))
+                    tf.put(word, tf.get(word) + wordScore);
                 else
-                    tf.put(word, idf.get(word));
+                    tf.put(word, wordScore);
+            }
         }
         
         return tf;
@@ -113,46 +184,40 @@ public class ExtractionSummarizer {
         {
             den += Math.pow(tf.get(word), 2);
         }
-        return den;
+       
+        return Math.sqrt(den);
     }
     
-    private Double[] powerMethod(Double[][] lexrank, int nbSentences, Double error)
+    private Double getWordScore(String word, Hashtable<String, Double> idf)
     {
-        Double[][] p = new Double[nbSentences][nbSentences];
-        
-        Arrays.fill(p[0], 1.0/nbSentences);
-        int t = 0;
-        Double delta = 0.0;
-        
-        do
-        {
-            t = t+1;
-            p[t] = multiply(transpose(lexrank, nbSentences), p[t-1]);
-            delta = determinant(minus(p[t], p[t-1]));
-        } while(delta < error);
-        
-        return p[t];
+        Double score = 12.233653765290939;
+         if(idf.containsKey(word))                   
+             score = idf.get(word);
+         
+         return score;
     }
     
+    /************************************** Methode des Centroides **********************************************/
     
-    private File summarizeText(ArrayList<String> sentences, Double[] scores) {
-        return new File ("");
-    }
-    
-    
-    private void calculateCentroid(ArrayList<String> sentences, Hashtable<String, Double> idf)
+    public String calculateCentroid(List<String> sentences, Hashtable<String, Double> idf)
     {
         // Calculer tf*idf pour chaque mot
         Hashtable<String, Double> tfidf = new Hashtable<String, Double>();
         for(String sentence : sentences)
         {
-            String[] words = sentence.split(" "); 
+            String[] words = sentence.split("[^a-zA-Z]");
             for(String word : words)
             {
-                if(tfidf.containsKey(word)) // TODO : REMOVE CAPITAL LETTTERS
-                    tfidf.put(word, tfidf.get(word) + idf.get(word));
-                else
-                    tfidf.put(word, idf.get(word));
+                if (word.matches(".*\\w.*"))
+                {
+                    word = word.toLowerCase();
+                    Double wordScore = getWordScore(word, idf);
+
+                    if(tfidf.containsKey(word))
+                        tfidf.put(word, tfidf.get(word) + wordScore);
+                    else
+                        tfidf.put(word, wordScore);
+                }
             }
         }
         
@@ -162,8 +227,7 @@ public class ExtractionSummarizer {
         {
             if(tfidf.get(word) > TRESHOLD)
                 centroid.put(word, tfidf.get(word));
-        }
-        
+        }        
         
         // Calculer les scores des phrases
         final int nbSentences = sentences.size();
@@ -172,53 +236,58 @@ public class ExtractionSummarizer {
         {
             sentencesScore[i] = 0.0;
             String sentence = sentences.get(i);
-            String[] words = sentence.split(" "); // TODO: remove all ponctuation and capital letter, and get a String[] of the words
+            String[] words = sentence.split("[^a-zA-Z]");
             for(String word : words)
             {
                 if(centroid.containsKey(word))
                     sentencesScore[i] = sentencesScore[i] + centroid.get(word);
             }
         }
+        
+        return getBestSentencesCendroid(sentences, sentencesScore);
     }
-     
-    private static Double determinant(Double[] m){
-        return 0.0;
-    }
-    
-    /*
-    public static double determinant(double[][] m) {
-        int n = m.length;
-        if (n == 1) {
-            return m[0][0];
-        } else {
-            double det = 0;
-            for (int j = 0; j < n; j++) {
-                det += Math.pow(-1, j) * m[0][j] * determinant(minor(m, 0, j));
-            }
-            return det;
-        }
-    }
-    
-    private static double[][] minor(final double[][] m, final int i, final int j) {
-        int n = m.length;
-        double[][] minor = new double[n-1][n-1];
-        // index for minor matrix position:
-        int r = 0, s = 0;
-        for (int k = 0; k < n; k++) {
-            double[] row = m[k];
-            if (k != i) {
-                for (int l = 0; l < row.length; l++) {
-                    if (l != j) {
-                        minor[r][s++] = row[l];
-                    }
-                }
-                r++;
-                s = 0;
+   
+    private String getBestSentencesCendroid(List<String> sentences, Double[] sentencesScore)
+    {
+        Double minScore = getNthBiggestValue(sentencesScore, (int)(sentencesScore.length * pourcentage));
+        String bestSentences = "";
+        
+        for(int i = 0; i < sentences.size() ; i++)
+        {
+            if(sentencesScore[i] > minScore)
+            {
+                bestSentences += sentences.get(i);
+                bestSentences += ". \n";
             }
         }
-        return minor;
+        
+        return bestSentences;
     }
-    */
+    
+    /************************************** Matrices Operations **********************************************/
+    
+    private Double getNthBiggestValue(Double[] sentencesScore, int N)
+    {
+        Double[] sentencesScoreCpy = Arrays.copyOf(sentencesScore, sentencesScore.length);
+        Arrays.sort(sentencesScoreCpy);
+        return sentencesScoreCpy[sentencesScore.length - N - 1];
+    }
+    
+    private int getNthBiggestValue(int[] sentencesScore, int N)
+    {
+        int[] sentencesScoreCpy = Arrays.copyOf(sentencesScore, sentencesScore.length);
+        Arrays.sort(sentencesScoreCpy);
+        return sentencesScoreCpy[sentencesScore.length - N - 1];
+    }
+    
+    private Double norm(Double[] vect) {
+        Double norm = 0.0;
+        for(int i =0; i < vect.length ; i++){
+            norm += vect[i]*vect[i];
+        }
+        norm = Math.sqrt(norm);
+        return norm;
+    }
     
     private Double[] minus(Double[] matrice1, Double[] matrice2)
     {
@@ -244,16 +313,38 @@ public class ExtractionSummarizer {
         return matrice;
     }
     
-    private static Double[] multiply(Double[][] matrice1, Double[] matrice2) {
+    private Double[] multiply(Double[][] matrice1, Double[] matrice2) {
        int rowsIn1 = matrice1.length;
        int columnsIn1 = matrice1[0].length; // same as rows in B
        Double[] matriceResult = new Double[rowsIn1];
        for (int i = 0; i < rowsIn1; i++) {
-            for (int k = 0; k < columnsIn1; k++) {
-                matriceResult[i] = matriceResult[i] + matrice1[i][k] * matrice2[k];
+           matriceResult[i] = 0.0;
+           for (int k = 0; k < columnsIn1; k++) {
+               matriceResult[i] = matriceResult[i] + matrice1[i][k] * matrice2[k];
            }
        }
        return matriceResult;
    }
 
+    private Double[] powerMethod(Double[][] lexrank, int nbSentences, Double error)
+    {
+        ArrayList<Double[]> p = new ArrayList<Double[]>();
+        p.add(new Double[nbSentences]);
+        
+        Arrays.fill(p.get(0), 1.0/nbSentences);
+        int t = 0;
+        Double delta = 0.0;
+        
+        do
+        {
+            t = t+1;
+            p.add(new Double[nbSentences]);
+        
+            p.set(t,multiply(transpose(lexrank, nbSentences), p.get(t-1)));
+            delta = norm(minus(p.get(t), p.get(t-1)));
+        } while(delta > error);
+        
+        return p.get(t);
+    }
+        
 }

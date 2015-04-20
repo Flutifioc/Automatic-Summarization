@@ -4,10 +4,14 @@ import AbstractionSummarizer.AbstractionSummarizer;
 import ExtractionSummarizer.ExtractionSummarizer;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -19,72 +23,45 @@ import java.util.logging.Logger;
  */
 public class Summarizer {
 
+    private static String text = "";
+
     public static void main(String[] args) throws UnirestException {
 
-        String toto = detectAcronyms("The U.S.S.R. are Russians. The U.S. are Americans.");
+        args = new String[] {"/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/"};
         
         ArrayList<File> documents = new ArrayList<File>();
-        File abstractDestFile = new File(args[0] + "results.txt");
+        File abstractDestFile = new File(args[0] + "abstractSummary.txt"); // valeur par défaut
+        File extractDestFile = new File(args[0] + "extractSummary.txt"); // valeur par défaut
+        
 
-        // Etape 1 : parsing du fichier de config
         try {
-            File configFile = new File(args[0]);
-            BufferedReader configReader = new BufferedReader(new FileReader(configFile));
-            String line;
-
-            while ((line = configReader.readLine()) != null) {
-                if (line.isEmpty()) {
-                    continue;
-                }
-                String[] elements = line.split("=");
-                if (elements.length < 2) {
-                    System.err.println("Received invalid line while parsing the config file :");
-                    System.err.println(line);
-                    continue;
-                }
-                if (elements[0].equalsIgnoreCase("file")) {
-                    File newFile = new File(elements[1]);
-                    if (!newFile.exists()) {
-                        System.err.println("Received non-existant file in config : " + elements[1]);
-                    } else {
-                        documents.add(newFile);
-                    }
-                } else if (elements[0].equalsIgnoreCase("abstractdestfile")) {
-                    abstractDestFile = new File(elements[1]);
-                    if (abstractDestFile.exists()) {
-                        abstractDestFile.delete();
-                    }
-                    abstractDestFile.createNewFile();
-                }
-                
-            }
-            // Etape 1 : lire le fichier texte les documents à résumer
+            
+            // Etape 0 : parsing du fichier de config
+            File configFile = new File(args[0] + "config.txt");
+            parseConfig(configFile, documents, abstractDestFile, extractDestFile);
 
             // Etape 1 bis : si besoin, le découper en phrases (si étape commune aux deux algorithmes)
-            ArrayList<String> sentences = new ArrayList<String>();
-            for (File document : documents) {
-                if (!document.exists()) {
-                    System.err.println("File " + document.getCanonicalPath() + " does not exist.");
-                    continue;
-                }
-                splitFile(document, sentences);
-            }
+            ArrayList<String> sentences = new ArrayList<String>();            
+            splitFile(documents, sentences);            
 
-        /* Version 1 (deux méthodes séparément) */
-        // Création des instances des summarizers
-            // ExtractionSummarizer extractSummarizer = new ExtractionSummarizer(annotedWords);
+            // Etape 2 : résumé par extraction
+            Extraction(sentences);
+
+            // Etape 2 bis : découpage du résultat de l'étape 2 en phrases
+            //sentences = new ArrayList<String>();
+            //splitFile(extractDestFile, sentences);
+            
+            // Etape 3 : résumé par abstraction
             AbstractionSummarizer abstractSummarizer = new AbstractionSummarizer(sentences, abstractDestFile);
-
-        // Etape 2 : appeler les deux méthodes sur cette entrée, et récupérer leurs sorties
-            // File extractedSummary = extractSummarizer.summarizeText(sentences);
-            File abstractedSummary = abstractSummarizer.summarizeText(sentences);
+            abstractSummarizer.summarizeText();
 
         } catch (IOException ex) {
             Logger.getLogger(Summarizer.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-            // Etape 3 : appel à ROUGE pour évaluer les sorties
+        // Etape 3 : appel à ROUGE pour évaluer les sorties
         // TODO
+        
         /* Version 2 (deux méthodes à la suite) */
         // Etape 2 : appeler la méthode par extraction, récupérer la sortie
         // Etape 2 bis : la stocker dans un fichier (optionnel)
@@ -93,19 +70,94 @@ public class Summarizer {
         // Etape 5 : appel à ROUGE pour évaluer la sortie
     }
 
-    public static void splitFile(File document, List<String> sentencesList) throws IOException {
+    private static Hashtable<String, Double> getIDFScores() throws FileNotFoundException, IOException {
+        Hashtable<String, Double> idf = new Hashtable<String, Double>();
+
+        File file = new File("/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/idf.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] content = line.split(" ");
+            if (content.length == 2) {
+                idf.put(content[0], Double.parseDouble(content[1]));
+            }
+        }
+
+        return idf;
+    }
+    
+    private static void parseConfig(File configFile, ArrayList<File> documents,
+            File abstractDestFile, File extractDestFile) throws FileNotFoundException, IOException {
+        BufferedReader configReader = new BufferedReader(new FileReader(configFile));
+        String line;
+
+        while ((line = configReader.readLine()) != null) {
+            if (line.isEmpty()) {
+                continue;
+            }
+            String[] elements = line.split("=");
+            if (elements.length < 2) {
+                System.err.println("Received invalid line while parsing the config file :");
+                System.err.println(line);
+                continue;
+            }
+            if (elements[0].equalsIgnoreCase("file")) {
+                File newFile = new File(elements[1]);
+                if (!newFile.exists()) {
+                    System.err.println("Received non-existant file in config : " + elements[1]);
+                } else {
+                    documents.add(newFile);
+                }
+            } else if (elements[0].equalsIgnoreCase("abstractdestfile")) {
+                abstractDestFile = new File(elements[1]);
+                if (abstractDestFile.exists()) {
+                    abstractDestFile.delete();
+                }
+                abstractDestFile.createNewFile();
+            }
+
+        }
+    }
+
+    private static void Extraction(List<String> sentences) throws IOException {
+        //WordAnnoter wordAnnoter = new WordAnnoter();
+        //wordAnnoter.calculateIdf();
+
+        Hashtable<String, Double> idf = getIDFScores();
+
+        ExtractionSummarizer extractSummarizer = new ExtractionSummarizer(sentences, idf);
+
+        String bestSentences = extractSummarizer.calculateCentroid(sentences, idf);
+        String bestSentences1 = extractSummarizer.calculateDegreeCentrality(sentences, idf, new int[sentences.size()][sentences.size()], new int[sentences.size()]);
+        String bestSentences2 = extractSummarizer.calculateLexRank(sentences, idf);
+        String summaries = /*"Texte\n" + text + "\nCentroid\n" + bestSentences + "\nCentrality\n" + bestSentences1 + "\nLexRank\n" +*/ bestSentences2;
+
+        WriteSummaryInFile(summaries);
+    }
+
+    private static void WriteSummaryInFile(String summary) {
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter("extractSummary.txt"));
+            out.write(summary);
+            out.close();
+        } catch (IOException e) {
+        }
+    }
+
+    private static void splitFile(File document, List<String> sentencesList) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(document));
         String line = reader.readLine();
-        String content = line;
+        String content = "";
         while (line != null) {
+            text = text + line + "\n";
             content = content + line;
             line = reader.readLine();
         }
         content = detectAcronyms(content);
         content = content.replaceAll("[\\r\\n]+", " ");
-        String[] sentences = content.split("[\\n\\r]|[^\\.].\\. |\\?|!|\"");
-        for (String sentence : sentences ){
-            if (!sentence.equals("")) {
+        String[] sentences = content.split("\\n|[.](?<!\\\\d)(?!\\\\d)|\\[.{1,10}-|;");//"[\\n\\r]|[^\\.].\\. |\\?|!|\"");
+        for (String sentence : sentences) {
+            if (!sentence.equals("") && !sentence.equals(" ")) {
                 sentence = sentence.replaceAll("\\.?##+", ".");
                 sentencesList.add(sentence);
             }
@@ -113,7 +165,17 @@ public class Summarizer {
         reader.close();
     }
     
-    public static String detectAcronyms(String input) {
+    private static void splitFile(ArrayList<File> documents, ArrayList<String> sentences) throws IOException {
+        for (File document : documents) {
+            if (!document.exists()) {
+                System.err.println("File " + document.getCanonicalPath() + " does not exist.");
+                continue;
+            }
+            splitFile(document, sentences);
+        }
+    }
+
+    private static String detectAcronyms(String input) {
         String[] elements = input.split("\\.");
         String output = "";
         for (String element : elements) {
