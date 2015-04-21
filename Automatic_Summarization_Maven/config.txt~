@@ -1,4 +1,7 @@
-file=/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/extractSummary.txt
+file=/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/Documents/texte.txt
 
 abstractdestfile=/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/AbstractSummary.txt
 
+extractdestfile=/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/ExtractSummary.txt
+
+bothdestfile=/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/bothMethodsSummary.txt

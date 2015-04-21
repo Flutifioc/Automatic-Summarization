@@ -1,5 +1,6 @@
 package Executables;
 
+
 import AbstractionSummarizer.AbstractionSummarizer;
 import ExtractionSummarizer.ExtractionSummarizer;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,33 +27,38 @@ public class Summarizer {
 
     public static void main(String[] args) throws UnirestException {
 
-        args = new String[] {"/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/"};
+        
+        args[0] = "C:\\Docs\\Poly\\IFT6010\\ift6010\\Automatic_Summarization_Maven\\";
         
         ArrayList<File> documents = new ArrayList<File>();
         File abstractDestFile = new File(args[0] + "abstractSummary.txt"); // valeur par défaut
         File extractDestFile = new File(args[0] + "extractSummary.txt"); // valeur par défaut
+        File bothMethodsDestFile = new File(args[0] + "bothMethodsSummary.txt"); // valeur par défaut
         
 
         try {
-            
             // Etape 0 : parsing du fichier de config
             File configFile = new File(args[0] + "config.txt");
-            parseConfig(configFile, documents, abstractDestFile, extractDestFile);
+            parseConfig(configFile, documents, abstractDestFile, extractDestFile, bothMethodsDestFile);
 
             // Etape 1 bis : si besoin, le découper en phrases (si étape commune aux deux algorithmes)
             ArrayList<String> sentences = new ArrayList<String>();            
             splitFile(documents, sentences);            
 
             // Etape 2 : résumé par extraction
-            Extraction(sentences);
+            Extraction(sentences, extractDestFile, args[0]);
 
-            // Etape 2 bis : découpage du résultat de l'étape 2 en phrases
-            //sentences = new ArrayList<String>();
-            //splitFile(extractDestFile, sentences);
-            
             // Etape 3 : résumé par abstraction
             AbstractionSummarizer abstractSummarizer = new AbstractionSummarizer(sentences, abstractDestFile);
             abstractSummarizer.summarizeText();
+            
+            // Etape 4 : résumé par abstraction du résultat du résumé par
+            // extraction
+            sentences = new ArrayList<String>();
+            splitFile(extractDestFile, sentences);
+            AbstractionSummarizer abstractSummarizer2 = new AbstractionSummarizer(sentences, bothMethodsDestFile);
+            abstractSummarizer2.summarizeText();
+            
 
         } catch (IOException ex) {
             Logger.getLogger(Summarizer.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,10 +75,10 @@ public class Summarizer {
         // Etape 5 : appel à ROUGE pour évaluer la sortie
     }
 
-    private static Hashtable<String, Double> getIDFScores() throws FileNotFoundException, IOException {
+    private static Hashtable<String, Double> getIDFScores(String execPath) throws FileNotFoundException, IOException {
         Hashtable<String, Double> idf = new Hashtable<String, Double>();
 
-        File file = new File("/usagers/lufon/Documents/IFT6010/IFT6010/Automatic_Summarization_Maven/idf.txt");
+        File file = new File(execPath + "idf.txt");
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
         while ((line = reader.readLine()) != null) {
@@ -87,7 +92,7 @@ public class Summarizer {
     }
     
     private static void parseConfig(File configFile, ArrayList<File> documents,
-            File abstractDestFile, File extractDestFile) throws FileNotFoundException, IOException {
+            File abstractDestFile, File extractDestFile, File bothMethodsDestFile) throws FileNotFoundException, IOException {
         BufferedReader configReader = new BufferedReader(new FileReader(configFile));
         String line;
 
@@ -114,16 +119,29 @@ public class Summarizer {
                     abstractDestFile.delete();
                 }
                 abstractDestFile.createNewFile();
+            } else if (elements[0].equalsIgnoreCase("extractdestfile")) {
+                extractDestFile = new File(elements[1]);
+                if (extractDestFile.exists()) {
+                    extractDestFile.delete();
+                }
+                extractDestFile.createNewFile();
+            } else if (elements[0].equalsIgnoreCase("bothdestfile")) {
+                bothMethodsDestFile = new File(elements[1]);
+                if (bothMethodsDestFile.exists()) {
+                    bothMethodsDestFile.delete();
+                }
+                bothMethodsDestFile.createNewFile();
             }
+            
 
         }
     }
 
-    private static void Extraction(List<String> sentences) throws IOException {
+    private static void Extraction(List<String> sentences, File destFile, String execPath) throws IOException {
         //WordAnnoter wordAnnoter = new WordAnnoter();
         //wordAnnoter.calculateIdf();
 
-        Hashtable<String, Double> idf = getIDFScores();
+        Hashtable<String, Double> idf = getIDFScores(execPath);
 
         ExtractionSummarizer extractSummarizer = new ExtractionSummarizer(sentences, idf);
 
@@ -132,12 +150,12 @@ public class Summarizer {
         String bestSentences2 = extractSummarizer.calculateLexRank(sentences, idf);
         String summaries = /*"Texte\n" + text + "\nCentroid\n" + bestSentences + "\nCentrality\n" + bestSentences1 + "\nLexRank\n" +*/ bestSentences2;
 
-        WriteSummaryInFile(summaries);
+        WriteSummaryInFile(summaries, destFile);
     }
 
-    private static void WriteSummaryInFile(String summary) {
+    private static void WriteSummaryInFile(String summary, File extractDestFile) {
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter("extractSummary.txt"));
+            BufferedWriter out = new BufferedWriter(new FileWriter(extractDestFile));
             out.write(summary);
             out.close();
         } catch (IOException e) {
