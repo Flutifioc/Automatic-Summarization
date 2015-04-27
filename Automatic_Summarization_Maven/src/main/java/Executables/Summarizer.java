@@ -27,37 +27,43 @@ public class Summarizer {
 
     public static void main(String[] args) throws UnirestException {
 
-        
-        args[0] = "C:\\Docs\\Poly\\IFT6010\\ift6010\\Automatic_Summarization_Maven\\";
-        
+        if (args.length == 0) {
+            args = new String[] {System.getProperty("user.dir")};
+            //System.err.println("Format error : expected one argument, the path of the repertory containing config");
+        }
         ArrayList<File> documents = new ArrayList<File>();
-        File abstractDestFile = new File(args[0] + "abstractSummary.txt"); // valeur par défaut
-        File extractDestFile = new File(args[0] + "extractSummary.txt"); // valeur par défaut
-        File bothMethodsDestFile = new File(args[0] + "bothMethodsSummary.txt"); // valeur par défaut
+        File abstractDestFile = new File(args[0] + "/abstractSummary.txt"); // valeur par défaut
+        File extractDestFile = new File(args[0] + "/extractSummary.txt"); // valeur par défaut
+        File bothMethodsDestFile = new File(args[0] + "/bothMethodsSummary.txt"); // valeur par défaut
         
 
         try {
             // Etape 0 : parsing du fichier de config
-            File configFile = new File(args[0] + "config.txt");
+            System.out.println("Parsing config file...");
+            File configFile = new File(args[0] + "/config.txt");
             parseConfig(configFile, documents, abstractDestFile, extractDestFile, bothMethodsDestFile);
 
             // Etape 1 bis : si besoin, le découper en phrases (si étape commune aux deux algorithmes)
+            System.out.println("Reading text files...");
             ArrayList<String> sentences = new ArrayList<String>();            
             splitFile(documents, sentences);            
 
             // Etape 2 : résumé par extraction
+            System.out.println("Summarizing texts by extraction...");
             Extraction(sentences, extractDestFile, args[0]);
 
             // Etape 3 : résumé par abstraction
+            System.out.println("Summarizing texts by abstraction...");
             AbstractionSummarizer abstractSummarizer = new AbstractionSummarizer(sentences, abstractDestFile);
-            abstractSummarizer.summarizeText();
+            abstractSummarizer.summarizeText(args[0]);
             
             // Etape 4 : résumé par abstraction du résultat du résumé par
             // extraction
+            System.out.println("Summarizing texts by both methods...");
             sentences = new ArrayList<String>();
             splitFile(extractDestFile, sentences);
             AbstractionSummarizer abstractSummarizer2 = new AbstractionSummarizer(sentences, bothMethodsDestFile);
-            abstractSummarizer2.summarizeText();
+            abstractSummarizer2.summarizeText(args[0]);
             
 
         } catch (IOException ex) {
@@ -78,7 +84,7 @@ public class Summarizer {
     private static Hashtable<String, Double> getIDFScores(String execPath) throws FileNotFoundException, IOException {
         Hashtable<String, Double> idf = new Hashtable<String, Double>();
 
-        File file = new File(execPath + "idf.txt");
+        File file = new File(execPath + "/idf.txt");
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
         while ((line = reader.readLine()) != null) {

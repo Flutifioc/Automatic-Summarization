@@ -41,11 +41,11 @@ public class AbstractionSummarizer {
         nonAnnotedSentences = new ArrayList<String>(inputSentences);
         annotedSentences = new ArrayList<String>();
         body = "";
-        maxGap = 2;
-        maxSentences = 5;
+        maxGap = 3;
+        maxSentences = 20;
         minRedundancy = 2;
         doCollapse = "true";
-        scoringFunction = 3;
+        scoringFunction = 1;
         this.destFile = destFile;
     }
     
@@ -69,8 +69,8 @@ public class AbstractionSummarizer {
         scoringFunction = value;
     }
     
-    private void annotateSentences() {
-        MaxentTagger tagger = new MaxentTagger("Documents/Taggers/english-bidirectional-distsim.tagger");
+    private void annotateSentences(String execPath) {
+        MaxentTagger tagger = new MaxentTagger(execPath + "/Taggers/english-bidirectional-distsim.tagger");
         annotedSentences = new ArrayList<String>();
         for (String sentence : nonAnnotedSentences) {
             String annotedString = tagger.tagString(sentence);
@@ -100,8 +100,8 @@ public class AbstractionSummarizer {
         this.destFile = newDest;
     }
     
-    public void summarizeText() throws UnirestException, FileNotFoundException, IOException {
-        annotateSentences();
+    public void summarizeText(String execPath) throws UnirestException, FileNotFoundException, IOException {
+        annotateSentences(execPath);
         createBodyForRequest();
         HttpResponse<JsonNode> response = Unirest.post("https://rxnlp-opinosis.p.mashape.com/generateOpinosisSummaries")
                 .header("X-Mashape-Key", "3GOWrhKJBYmshlk9vy3Fkz1lHzIYp1AfV6Fjsn37wRHotx852h")
@@ -110,8 +110,10 @@ public class AbstractionSummarizer {
                 .body(body)
                 .asJson();
 
-        System.out.println(response.getBody());
-        System.out.println(response.getStatus());
+        if (response.getStatus() == 504) {
+            System.err.println("Erreur : timeout. Relancer le programme.");
+            return;
+        }
         FileOutputStream destStream = new FileOutputStream(destFile);
         JSONArray responseArray = response.getBody().getArray().getJSONObject(0).getJSONArray("results");
         String resultSentences = "";
